@@ -1,3 +1,4 @@
 backend/go.mod
 backend/go.sum
 backend/test
+backend/.env
