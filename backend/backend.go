@@ -14,6 +14,54 @@ import (
 
 var db *pgxpool.Pool
 
+func player2Connect(c *gin.Context) {
+	id := c.Query("id")
+	var count int
+	err := db.QueryRow(context.Background(),
+		`SELECT COUNT(*) FROM sessions WHERE id = $1`,
+		id).Scan(&count)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": "error counting"})
+		return
+	}
+
+	if count < 1 {
+		c.JSON(http.StatusNotFound, gin.H{"result": "Room not found"})
+		return
+	}
+
+	_, err = db.Exec(context.Background(),
+		`UPDATE sessions SET p2_connect_status=true WHERE id=$1`,
+		id,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": "error updating db"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"result": "Game joined"})
+
+}
+
+func isp2(id string) bool {
+	var isConn bool
+
+	err := db.QueryRow(
+		context.Background(),
+		`SELECT p2_connect_status WHERE id=$1`,
+		id,
+	).Scan(&isConn)
+
+	if err != nil {
+		return false
+	}
+
+	return isConn
+
+}
+
 func dba(c *gin.Context) {
 	var id string
 	err := db.QueryRow(
@@ -51,5 +99,6 @@ func main() {
 
 	router.GET("/ping", ping)
 	router.GET("/id", dba)
+	router.GET("/join", player2Connect)
 	router.Run(":2026")
 }
