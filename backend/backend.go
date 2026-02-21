@@ -14,6 +14,23 @@ import (
 
 var db *pgxpool.Pool
 
+func isp2(id string) bool {
+	var isConn bool
+
+	err := db.QueryRow(
+		context.Background(),
+		`SELECT p2_connect_status WHERE id=$1`,
+		id,
+	).Scan(&isConn)
+
+	if err != nil {
+		return false
+	}
+
+	return isConn
+
+}
+
 func dba(c *gin.Context) {
 	var id string
 	err := db.QueryRow(
