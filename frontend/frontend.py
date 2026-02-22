@@ -43,7 +43,9 @@ class FrontEnd:
 
         def wait_for_player_results():
             while True:
-                x=getFinal(GAME_CODE, PLAYER)()
+                x=getFinal(GAME_CODE, PLAYER)
+                print(x.status_code)
+                print(x)
                 if x.status_code==200:
                     drawGuessAnswerFrame()
                     self.raiseFrame(self.guessAnswerFrame)()
