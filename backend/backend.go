@@ -143,6 +143,49 @@ func questionGenerator(id string, player int, questPos int, real bool) {
 	}
 }
 
+func returnQNAsOfPlayer(c *gin.Context, player int) {
+	id := c.Query("id")
+	returnValue := make(map[string]string)
+	var queryRowValue string
+	switch player {
+	case 1:
+		for i := 1; i < 4; i++ {
+			query := fmt.Sprintf("SELECT p1_q"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
+			if err != nil {
+				log.Fatal(err)
+			}
+			returnValue["p1_q"+strconv.Itoa(i)] = queryRowValue
+		}
+		for i := 1; i < 4; i++ {
+			query := fmt.Sprintf("SELECT p1_a"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
+			if err != nil {
+				log.Fatal(err)
+			}
+			returnValue["p1_a"+strconv.Itoa(i)] = queryRowValue
+		}
+	case 2:
+		for i := 1; i < 4; i++ {
+			query := fmt.Sprintf("SELECT p2_q"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
+			if err != nil {
+				log.Fatal(err)
+			}
+			returnValue["p2_q"+strconv.Itoa(i)] = queryRowValue
+		}
+		for i := 1; i < 4; i++ {
+			query := fmt.Sprintf("SELECT p2_a"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
+			if err != nil {
+				log.Fatal(err)
+			}
+			returnValue["p2_a"+strconv.Itoa(i)] = queryRowValue
+		}
+	}
+	c.JSON(http.StatusOK, returnValue)
+}
+
 func player2Connect(c *gin.Context) {
 	id := c.Query("id")
 	var count int
@@ -420,5 +463,6 @@ func main() {
 	router.GET("/getGame", getGame)
 	router.GET("/create", create_room)
 	router.GET("/submit", funcSubmitAnswer)
+	router.GET("/qnaOfPlayer", returnQNAsOfPlayer)
 	router.Run(":2026")
 }
