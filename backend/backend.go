@@ -14,6 +14,49 @@ import (
 
 var db *pgxpool.Pool
 
+func startGame(c *gin.Context) {
+	id := c.Query("id")
+
+	if !gameReady(id) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "Game not ready yet!"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "Game ready"})
+
+}
+
+func gameReady(id string) bool {
+	var count int
+	err := db.QueryRow(context.Background(),
+		`SELECT COUNT(*) FROM sessions WHERE id = $1`,
+		id).Scan(&count)
+
+	if err != nil || count < 1 {
+		return false
+	}
+	var hasfilled bool
+	err = db.QueryRow(context.Background(),
+		`SELECT (
+    (p1_a1 <> '')::int +
+    (p1_a2 <> '')::int +
+    (p1_a3 <> '')::int +
+    (p2_a1 <> '')::int +
+    (p2_a2 <> '')::int +
+    (p2_a3 <> '')::int
+    ) >= 4
+	FROM sessions
+	WHERE id = $1`,
+		id,
+	).Scan(&hasfilled)
+
+	if err != nil {
+		return false
+	}
+
+	return hasfilled
+
+}
+
 func player2Connect(c *gin.Context) {
 	id := c.Query("id")
 	var count int
@@ -115,5 +158,6 @@ func main() {
 	router.GET("/ping", ping)
 	router.GET("/id", dba)
 	router.GET("/join", player2Connect)
+	router.GET("start", startGame)
 	router.Run(":2026")
 }
