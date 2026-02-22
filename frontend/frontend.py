@@ -39,13 +39,7 @@ class FrontEnd:
                     self.raiseFrame(self.guessAnswerFrame)()
                     return
                 time.sleep(3)
-        def drawWinCondition(bool):
-            self.writeWinConditionFrame = ttk.Frame(mainframe)
-            self.writeWinConditionFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
-            if bool:
-                ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
-            else:
-                ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
+
 
         def giveAnswer():
             self.raiseFrame(self.submitFrame)()
@@ -113,6 +107,14 @@ class FrontEnd:
         ).grid(row=0, column=0, sticky="N")
 
         self.submitFrame.columnconfigure(0, weight=1)
+
+        def drawWinCondition(bool):
+            self.writeWinConditionFrame = ttk.Frame(mainframe)
+            self.writeWinConditionFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
+            if bool:
+                ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
+            else:
+                ttk.Label(self.writeWinConditionFrame, text="You lose!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
 
         # guess answer menu
         def drawGuessAnswerFrame():
@@ -185,7 +187,7 @@ class FrontEnd:
                 value=3,
                 style="sideButton.TRadiobutton",
             ).grid(row=6, column=0, sticky="WE")
-            if int(answer.get()) == dataFinal["real"]:
+            if str(answer.get()) == dataFinal["real"]:
                 drawWinCondition(True)
                 self.raiseFrame(self.writeWinConditionFrame)()
                 # some function to declare user won
