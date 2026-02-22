@@ -35,7 +35,7 @@ func gameReady(id string) bool {
 		return false
 	}
 	var hasfilled bool
-	db.QueryRow(context.Background(),
+	err = db.QueryRow(context.Background(),
 		`SELECT (
     (p1_a1 <> '')::int +
     (p1_a2 <> '')::int +
@@ -48,6 +48,10 @@ func gameReady(id string) bool {
 	WHERE id = $1`,
 		id,
 	).Scan(&hasfilled)
+
+	if err != nil {
+		return false
+	}
 
 	return hasfilled
 
