@@ -22,11 +22,17 @@ class FrontEnd:
     def __init__(self, root):
 
         def generateGameCode():
-            self.raiseFrame(self.waitingFrame)
+            self.raiseFrame(self.writeAnswerFrame)
             PLAYER = '1'
             GAME_CODE = str(randint(10000000, 99999999))
             createRoom(GAME_CODE)
-            pass
+            drawGuessAnswerFrame()
+        
+        def joinGame():
+            self.raiseFrame(self.writeAnswerFrame)
+            join(GAME_CODE)
+            PLAYER = '2'
+            drawGuessAnswerFrame()
 
 
         # establish root
@@ -237,7 +243,7 @@ class FrontEnd:
             text="Join Game",
             padding=10,
             style="Main.TButton",
-            command=self.raiseFrame(self.writeAnswerFrame),
+            command=joinGame,
         ).grid(
             row=3
         )  # TODO: add a function to validate join code with a generated game code on backend
