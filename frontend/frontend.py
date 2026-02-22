@@ -2,6 +2,7 @@ from random import randint
 from tkinter import *
 from tkinter import ttk
 import time
+import threading
 from httpRequest import *
 
 GAME_CODE: str = ""
@@ -21,6 +22,15 @@ class FrontEnd:
 
     def __init__(self, root):
 
+        def wait_for_player():
+            while True:
+                x=checkGame(GAME_CODE, PLAYER)
+                print(x)
+                if x:
+                    drawWriteAnswerFrame()
+                    self.raiseFrame(self.writeAnswerFrame)()
+                    return
+                time.sleep(3)
 
         def generateGameCode():
             global PLAYER, GAME_CODE
@@ -29,13 +39,9 @@ class FrontEnd:
             createRoom(GAME_CODE)
             drawWaitingFrame()
             self.raiseFrame(self.waitingFrame)()
-            while True:
-                if checkGame(GAME_CODE, PLAYER):
-                    break
-                else:
-                    time.sleep(5)
-            drawWriteAnswerFrame()
-            self.raiseFrame(self.writeAnswerFrame)()
+            thread = threading.Thread(target=wait_for_player)
+            thread.start()
+            
         
         def joinGame():
             global PLAYER, GAME_CODE
