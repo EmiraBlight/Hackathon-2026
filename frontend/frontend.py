@@ -108,13 +108,14 @@ class FrontEnd:
 
         self.submitFrame.columnconfigure(0, weight=1)
 
-        def drawWinCondition(boolo):
+        def drawWinCondition(winCondition):
             self.writeWinConditionFrame = ttk.Frame(mainframe)
             self.writeWinConditionFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
-            if boolo:
+            if winCondition:
                 ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
             else:
                 ttk.Label(self.writeWinConditionFrame, text="You lose!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
+            self.writeWinConditionFrame.columnconfigure(0, weight=1)
 
         # guess answer menu
         def drawGuessAnswerFrame():
