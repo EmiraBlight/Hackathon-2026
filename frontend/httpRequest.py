@@ -3,20 +3,25 @@ from requests.models import Response
 
 URL = "http://10.109.206.111:2026"
 
+
 def ping():
     return requests.get(f"{URL}/ping").json()["message"] == "pong"
 
+
 def player2Connect(gameCode: str) -> Response:
     payload = {"id": gameCode}
-    return requests.get(f"{URL}/join", params=payload).json()
+    return requests.get(f"{URL}/join", params=payload)
+
 
 def createRoom(gameCode: str) -> Response:
     payload = {"id": gameCode}
-    return requests.get(f"{URL}/create", params=payload).json()
+    return requests.get(f"{URL}/create", params=payload)
+
 
 def getGame(gameCode: str, player: str) -> Response:
     payload = {"id": gameCode, "player": player}
-    return requests.get(f"{URL}/getGame", params=payload).json()
+    return requests.get(f"{URL}/getGame", params=payload)
+
 
 def join(gameCode: str) -> Response:
     payload = {"id": gameCode}
@@ -25,4 +30,4 @@ def join(gameCode: str) -> Response:
 
 def submitAnswer(gameCode: str, player: str, answer: str) -> Response:
     payload = {"id": gameCode, "player": player, "answer": answer}
-    return requests.get(f"{URL}/submit", params=payload).json()
+    return requests.get(f"{URL}/submit", params=payload)
