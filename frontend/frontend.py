@@ -89,32 +89,32 @@ class FrontEnd:
 
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(getGame(GAME_CODE, PLAYER)),
+                text=str(next(getGame(GAME_CODE, PLAYER))),
                 style="Side.TLabel",
             ).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(getGame(GAME_CODE, PLAYER)),
+                text=str(next(getGame(GAME_CODE, PLAYER))),
                 style="Side.TLabel",
             ).grid(row=2, column=2, sticky=(E, W))
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(getGame(GAME_CODE, PLAYER)),
+                text=str(next(getGame(GAME_CODE, PLAYER))),
                 style="Side.TLabel",
             ).grid(row=3, column=2, sticky="W, E")
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(getGame(GAME_CODE, PLAYER)),
+                text=str(next(getGame(GAME_CODE, PLAYER))),
                 style="Side.TLabel",
             ).grid(row=4, column=2, sticky="W, E")
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(getGame(GAME_CODE, PLAYER)),
+                text=str(next(getGame(GAME_CODE, PLAYER))),
                 style="Side.TLabel",
             ).grid(row=5, column=2, sticky="W, E")
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(getGame(GAME_CODE, PLAYER)),
+                text=str(next(getGame(GAME_CODE, PLAYER))),
                 style="Side.TLabel",
             ).grid(row=6, column=2, sticky="W, E")
             for widget in self.guessAnswerFrame.winfo_children():
@@ -184,19 +184,19 @@ class FrontEnd:
 
 
             ttk.Label(
-                self.writeAnswerFrame, text=getGame(GAME_CODE, PLAYER), style="Side.TLabel"
+                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
             ).grid(row=1, column=1, sticky="W, E")  # TODO: backend
             ttk.Label(
-                self.writeAnswerFrame, text=getGame(GAME_CODE, PLAYER), style="Side.TLabel"
+                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
             ).grid(row=2, column=1, sticky="W, E")
             ttk.Label(
-                self.writeAnswerFrame, text=getGame(GAME_CODE, PLAYER), style="Side.TLabel"
+                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
             ).grid(row=3, column=1, sticky="W, E")
             ttk.Label(
-                self.writeAnswerFrame, text=getGame(GAME_CODE, PLAYER), style="Side.TLabel"
+                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
             ).grid(row=4, column=1, sticky="W, E")
             ttk.Label(
-                self.writeAnswerFrame, text=getGame(GAME_CODE, PLAYER), style="Side.TLabel"
+                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
             ).grid(row=5, column=1, sticky="W, E")
 
             for widget in self.writeAnswerFrame.winfo_children():
