@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,6 +16,19 @@ import (
 )
 
 var db *pgxpool.Pool
+
+func ask(c *gin.Context) {
+	id := c.Query("id")
+	p := c.Query("p")
+	q := c.Query("q")
+	s := c.Query("s")
+
+	player, _ := strconv.Atoi(p)
+	question, _ := strconv.Atoi(q)
+
+	fetchAndInsertAnswers(id, player, question, s)
+
+}
 
 func startGame(c *gin.Context) {
 	id := c.Query("id")
@@ -141,46 +155,74 @@ func ping(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
-//the player's range is 1-2, and questPos' range is 1-3
+// the player's range is 1-2, and questPos' range is 1-3
 func fetchAndInsertAnswers(id string, player int, questPos int, questStr string) {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, nil)
-	if err!=nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	aiResponse, err := client.Models.GenerateContent(
 		ctx,
 		"gemma-3-1b-it",
-		genai.Text("%s", questStr),
+		genai.Text(questStr),
 		nil,
 	)
-	if err!=nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	switch player {
 	case 1:
 		switch questPos {
-			case 1:
-				err := db.Exec(`UPDATE sessions SET p1_a1=$1 WHERE id=$2`, aiResponse.Text(), id)
-				if err!=nil { log.Fatal(err) }
-			case 2:
-				err := db.Exec(`UPDATE sessions SET p1_a2=$1 WHERE id=$2`, aiResponse.Text(), id)
-				if err!=nil { log.Fatal(err) }
-			case 3:
-				err := db.Exec(`UPDATE sessions SET p1_a3=$1 WHERE id=$2`, aiResponse.Text(), id)
-				if err!=nil { log.Fatal(err) }
-			default:
-				log.Fatal(questPos)
+		case 1:
+			_, err := db.Exec(
+				context.Background(),
+				`UPDATE sessions SET p1_a1=$1 WHERE id=$2`, aiResponse.Text(), id)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 2:
+			_, err := db.Exec(
+				context.Background(),
+				`UPDATE sessions SET p1_a2=$1 WHERE id=$2`, aiResponse.Text(), id)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 3:
+			_, err := db.Exec(
+				context.Background(),
+				`UPDATE sessions SET p1_a3=$1 WHERE id=$2`, aiResponse.Text(), id)
+			if err != nil {
+				log.Fatal(err)
+			}
+		default:
+			log.Fatal(questPos)
 		}
 	case 2:
 		switch questPos {
-			case 1:
-				err := db.Exec(`UPDATE sessions SET p2_a1=$1 WHERE id=$2`, aiResponse.Text(), id)
-				if err!=nil { log.Fatal(err) }
-			case 2:
-				err := db.Exec(`UPDATE sessions SET p2_a2=$1 WHERE id=$2`, aiResponse.Text(), id)
-				if err!=nil { log.Fatal(err) }
-			case 3:
-				err := db.Exec(`UPDATE sessions SET p2_a3=$1 WHERE id=$2`, aiResponse.Text(), id)
-				if err!=nil { log.Fatal(err) }
-			default:
-				log.Fatal(questPos)
+		case 1:
+			_, err := db.Exec(
+				context.Background(),
+				`UPDATE sessions SET p2_a1=$1 WHERE id=$2`, aiResponse.Text(), id)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 2:
+			_, err := db.Exec(
+				context.Background(),
+				`UPDATE sessions SET p2_a2=$1 WHERE id=$2`, aiResponse.Text(), id)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case 3:
+			_, err := db.Exec(
+				context.Background(),
+				`UPDATE sessions SET p2_a3=$1 WHERE id=$2`, aiResponse.Text(), id)
+			if err != nil {
+				log.Fatal(err)
+			}
+		default:
+			log.Fatal(questPos)
 		}
 	default:
 		log.Fatal(player)
@@ -206,6 +248,7 @@ func main() {
 	router.GET("/ping", ping)
 	router.GET("/id", dba)
 	router.GET("/join", player2Connect)
-	router.GET("start", startGame)
+	router.GET("/start", startGame)
+	router.GET("/ai", ask)
 	router.Run(":2026")
 }
