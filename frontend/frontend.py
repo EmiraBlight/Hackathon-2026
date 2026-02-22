@@ -5,7 +5,7 @@ from random import randint
 class Frontend:
 
     def generate_game_code(self):
-        return randint(10000000, 99999999)
+        return str(randint(10000000, 99999999))
 
     def raiseFrame(self, frame: ttk.Frame):
         return lambda: frame.tkraise()
