@@ -20,7 +20,41 @@ class FrontEnd:
         ttk.Style().configure(event.widget.winfo_class(), wraplength=event.widget.winfo_width())
 
     def __init__(self, root):
+        # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
+        self.mainMenu = ttk.Frame(mainframe)
 
+        ttk.Entry(self.mainMenu, font=("Consolas", 30)).grid(
+            row=2, column=1, sticky="W, E"
+        )
+
+
+        ttk.Label(
+            self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
+        ).grid(row=0)
+        ttk.Button(
+            self.mainMenu,
+            text="Create Game",
+            padding=10,
+            style="Main.TButton",
+            command=generateGameCode,
+        ).grid(row=1)
+        ttk.Button(
+            self.mainMenu,
+            text="Join Game",
+            padding=10,
+            style="Main.TButton",
+            command=joinGame,
+        ).grid(
+            row=3
+        )  # TODO: add a function to validate join code with a generated game code on backend
+
+        self.mainMenu.columnconfigure(0, weight=1)
+        self.mainMenu.rowconfigure((0, 1, 2), weight=1)
+
+        for child in mainframe.winfo_children():
+            child.grid_configure(sticky=(N, W, E, S), row=0, column=0)
+        self.raiseFrame(self.mainMenu)
+        
         def generateGameCode():
 
             PLAYER = '1'
@@ -225,40 +259,7 @@ class FrontEnd:
         self.waitingFrame.columnconfigure(0, weight=1)
         self.waitingFrame.rowconfigure(1, weight=1)
 
-        # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
-        self.mainMenu = ttk.Frame(mainframe)
 
-        ttk.Entry(self.mainMenu, font=("Consolas", 30)).grid(
-            row=2, column=1, sticky="W, E"
-        )
-
-
-        ttk.Label(
-            self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
-        ).grid(row=0)
-        ttk.Button(
-            self.mainMenu,
-            text="Create Game",
-            padding=10,
-            style="Main.TButton",
-            command=generateGameCode,
-        ).grid(row=1)
-        ttk.Button(
-            self.mainMenu,
-            text="Join Game",
-            padding=10,
-            style="Main.TButton",
-            command=joinGame,
-        ).grid(
-            row=3
-        )  # TODO: add a function to validate join code with a generated game code on backend
-
-        self.mainMenu.columnconfigure(0, weight=1)
-        self.mainMenu.rowconfigure((0, 1, 2), weight=1)
-
-        for child in mainframe.winfo_children():
-            child.grid_configure(sticky=(N, W, E, S), row=0, column=0)
-        self.raiseFrame(self.mainMenu)
 
         root.mainloop()
 
