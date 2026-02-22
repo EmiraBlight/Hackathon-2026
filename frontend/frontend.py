@@ -32,6 +32,7 @@ class FrontEnd:
                     return
                 time.sleep(3)
         def giveAnswer():
+            self.raiseFrame(self.submitFrame)
             if data[1] == "":
                 giveEntry = ent1.get()
             elif data[3] == "":
@@ -198,7 +199,7 @@ class FrontEnd:
                 text="Submit",
                 padding=10,
                 style="Main.TButton",
-                command=self.raiseFrame(self.submitFrame),
+                command=giveAnswer,
             ).grid(
                 row=7, column=1
             )  # TODO: Add a function to submit answer to backend and draw next frame
