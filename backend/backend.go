@@ -57,18 +57,6 @@ func funcSubmitAnswer(c *gin.Context) {
 
 }
 
-func ask(c *gin.Context) {
-	id := c.Query("id")
-	p := c.Query("p")
-	q := c.Query("q")
-	s := c.Query("s")
-
-	player, _ := strconv.Atoi(p)
-	question, _ := strconv.Atoi(q)
-
-	fetchAndInsertAnswers(id, player, question, s)
-}
-
 func startGame(c *gin.Context) {
 	id := c.Query("id")
 
@@ -169,7 +157,9 @@ func returnQNAsOfPlayer(c *gin.Context) {
 			returnValue["p1_a"+strconv.Itoa(i)] = queryRowValue
 		}
 		err := db.QueryRow(context.Background(), `SELECT p1_real FROM sessions WHERE id=$1`, id).Scan(&queryRowValue)
-		if err!=nil { log.Fatal(err) }
+		if err != nil {
+			log.Fatal(err)
+		}
 		returnValue["p1_real"] = queryRowValue
 	case 2:
 		for i := 1; i < 4; i++ {
@@ -189,7 +179,9 @@ func returnQNAsOfPlayer(c *gin.Context) {
 			returnValue["p2_a"+strconv.Itoa(i)] = queryRowValue
 		}
 		err := db.QueryRow(context.Background(), `SELECT p2_real FROM sessions WHERE id=$1`, id).Scan(&queryRowValue)
-		if err!=nil { log.Fatal(err) }
+		if err != nil {
+			log.Fatal(err)
+		}
 		returnValue["p2_real"] = queryRowValue
 	}
 	c.JSON(http.StatusOK, returnValue)
@@ -280,25 +272,6 @@ func isp2(id string) bool {
 
 	return isConn
 
-}
-
-func dba(c *gin.Context) {
-	var id string
-	err := db.QueryRow(
-		context.Background(),
-		`SELECT id FROM sessions;`,
-	).Scan(&id)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"result": id})
-}
-
-func ping(c *gin.Context) {
-	c.JSON(200, gin.H{"message": "pong"})
 }
 
 // the player's range is 1-2, and questPos' range is 1-3
@@ -464,11 +437,8 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/ping", ping)
-	router.GET("/id", dba)
 	router.GET("/join", player2Connect)
 	router.GET("/start", startGame)
-	router.GET("/ai", ask)
 	router.GET("/getGame", getGame)
 	router.GET("/create", create_room)
 	router.GET("/submit", funcSubmitAnswer)
