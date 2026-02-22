@@ -27,10 +27,14 @@ class FrontEnd:
 
         ttk.Style().configure("Main.TButton", font=("Consolas", 50))
         ttk.Style().configure("Main.TLabel", font=("Consolas", 50))
+        ttk.Style().configure("Side.TLabel", font=("Consolas", 30))
+        ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 30))
 
         # guess answer menu
-
         self.guessAnswerFrame = ttk.Frame(mainframe)
+
+
+
 
         # write answer menu
         self.writeAnswerFrame = ttk.Frame(mainframe)
@@ -38,9 +42,19 @@ class FrontEnd:
         ttk.Label(self.writeAnswerFrame, text="Write Answer", padding=10, style="Main.TLabel").grid(row=0, column=1, sticky="N")
 
         for i in range(1, 6, 2):
-            ttk.Label(self.writeAnswerFrame, text=f"Q{int((i+1)/2)}:").grid(row=i, column=0, sticky="W")
-            ttk.Label(self.writeAnswerFrame, text=f"A{int((i+1)/2)}:").grid(row=i+1, column=0, sticky="W")
-            ttk.Entry(self.writeAnswerFrame).grid(row=i+1, column=1, sticky="W")
+            ttk.Label(self.writeAnswerFrame, text=f"Q{int((i+1)/2)}:", style="Side.TLabel").grid(row=i, column=0, sticky="W")
+            ttk.Label(self.writeAnswerFrame, text=f"A{int((i+1)/2)}:", style="Side.TLabel").grid(row=i+1, column=0, sticky="W")
+        ttk.Entry(self.writeAnswerFrame, font=("Consolas", 30)).grid(row=6, column=1, sticky="W, E")
+        ttk.Button(self.writeAnswerFrame, text="Submit", padding=10, style="Main.TButton").grid(row=7, column=1) #TODO: Add a function to submit answer to backend and draw next frame
+
+        ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_QUESTION1", style="Side.TLabel").grid(row=1, column=1, sticky="W") #TODO: backend
+        ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_ANSWER1", style="Side.TLabel").grid(row=2, column=1, sticky="W")
+        ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_QUESTION2", style="Side.TLabel").grid(row=3, column=1, sticky="W")
+        ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_ANSWER2", style="Side.TLabel").grid(row=4, column=1, sticky="W")
+        ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_QUESTION3", style="Side.TLabel").grid(row=5, column=1, sticky="W")
+
+        self.writeAnswerFrame.columnconfigure(1, weight=1)
+        self.writeAnswerFrame.rowconfigure((1, 2, 3, 4, 5, 6), weight=1)
 
         # write questions menu
         """
