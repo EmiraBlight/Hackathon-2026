@@ -34,3 +34,7 @@ def join(gameCode: str) -> Response:
 def submitAnswer(gameCode: str, player: str, answer: str) -> Response:
     payload = {"id": gameCode, "player": player, "answer": answer}
     return requests.get(f"{URL}/submit", params=payload)
+
+def checkGame(gameCode:str, player:str):
+    payload = {"id": gameCode, "player": player}
+    return requests.get(f"{URL}/getGame", params=payload) == 200

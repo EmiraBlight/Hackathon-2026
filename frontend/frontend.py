@@ -1,7 +1,7 @@
 from random import randint
 from tkinter import *
 from tkinter import ttk
-
+import time
 from httpRequest import *
 
 GAME_CODE: str = ""
@@ -29,7 +29,13 @@ class FrontEnd:
             createRoom(GAME_CODE)
             drawWaitingFrame()
             self.raiseFrame(self.waitingFrame)()
-
+            while True:
+                if checkGame(GAME_CODE, PLAYER):
+                    break
+                else:
+                    time.sleep(5)
+            drawWriteAnswerFrame()
+            self.raiseFrame(self.writeAnswerFrame)()
         
         def joinGame():
             global PLAYER, GAME_CODE
