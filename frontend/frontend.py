@@ -188,20 +188,22 @@ class FrontEnd:
                 value=3,
                 style="sideButton.TRadiobutton",
             ).grid(row=6, column=0, sticky="WE")
-            if str(answer.get()) == dataFinal["real"]:
-                drawWinCondition(True)
-                self.raiseFrame(self.writeWinConditionFrame)()
-                # some function to declare user won
-            else:
-                drawWinCondition(False)
-                self.raiseFrame(self.writeWinConditionFrame)()
+
+            def drawWinCondition2():
+                if str(answer.get()) == dataFinal["real"]:
+                    drawWinCondition(True)
+                    self.raiseFrame(self.writeWinConditionFrame)()
+                    # some function to declare user won
+                else:
+                    drawWinCondition(False)
+                    self.raiseFrame(self.writeWinConditionFrame)()
                 # some function to declare user lost
             ttk.Button(
                 self.guessAnswerFrame,
                 text="Submit",
                 padding=10,
                 style="Main.TButton",
-                command=self.raiseFrame(self.submitFrame),
+                command=drawWinCondition2,
             ).grid(
                 row=7, column=0, columnspan=3
             )  # TODO: Add a function to submit answer to backend and backend responds with whether the user was correct
