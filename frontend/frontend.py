@@ -35,6 +35,12 @@ class FrontEnd:
         ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 30))
         ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 30))
 
+        # waiting screen after submitting answer
+        self.submitFrame = ttk.Frame(mainframe)
+
+        ttk.Label(self.submitFrame, text="Waiting for other Player", style="Main.TLabel").grid(row=0, column=0, sticky="N")
+
+        self.submitFrame.columnconfigure(0, weight=1)
         # guess answer menu
         self.guessAnswerFrame = ttk.Frame(mainframe)
 
@@ -61,7 +67,7 @@ class FrontEnd:
         ttk.Radiobutton(self.guessAnswerFrame, variable=answer, value='answer3', style="sideButton.TRadiobutton").grid(row=6, column=0, sticky="WE")
 
 
-        ttk.Button(self.guessAnswerFrame, text="Submit", padding=10, style="Main.TButton").grid(row=7, column=0, columnspan=3) #TODO: Add a function to submit answer to backend and backend responds with whether the user was correct
+        ttk.Button(self.guessAnswerFrame, text="Submit", padding=10, style="Main.TButton", command=self.raiseFrame(self.submitFrame)).grid(row=7, column=0, columnspan=3) #TODO: Add a function to submit answer to backend and backend responds with whether the user was correct
 
 
         self.guessAnswerFrame.columnconfigure(2, weight=1)
@@ -76,7 +82,7 @@ class FrontEnd:
             ttk.Label(self.writeAnswerFrame, text=f"Q{int((i+1)/2)}:", style="Side.TLabel").grid(row=i, column=0, sticky="W")
             ttk.Label(self.writeAnswerFrame, text=f"A{int((i+1)/2)}:", style="Side.TLabel").grid(row=i+1, column=0, sticky="W")
         ttk.Entry(self.writeAnswerFrame, font=("Consolas", 30)).grid(row=6, column=1, sticky="W, E")
-        ttk.Button(self.writeAnswerFrame, text="Submit", padding=10, style="Main.TButton").grid(row=7, column=1) #TODO: Add a function to submit answer to backend and draw next frame
+        ttk.Button(self.writeAnswerFrame, text="Submit", padding=10, style="Main.TButton", command=self.raiseFrame(self.submitFrame)).grid(row=7, column=1) #TODO: Add a function to submit answer to backend and draw next frame
 
         ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_QUESTION1", style="Side.TLabel").grid(row=1, column=1, sticky="W, E") #TODO: backend
         ttk.Label(self.writeAnswerFrame, text="PLACEHOLDER_ANSWER1", style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
@@ -114,7 +120,7 @@ class FrontEnd:
 
         ttk.Label(self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel").grid(row=0)
         ttk.Button(self.mainMenu, text="Create Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.waitingFrame)).grid(row=1)
-        ttk.Button(self.mainMenu, text="Join Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.guessAnswerFrame)).grid(row=2) # TODO: add a function to validate join code with a generated game code on backend
+        ttk.Button(self.mainMenu, text="Join Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.writeAnswerFrame)).grid(row=2) # TODO: add a function to validate join code with a generated game code on backend
 
         self.mainMenu.columnconfigure(0, weight=1)
         self.mainMenu.rowconfigure((0, 1, 2), weight=1)
