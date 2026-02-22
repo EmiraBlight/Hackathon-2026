@@ -130,7 +130,8 @@ class FrontEnd:
 
 
             dataFinal = getFinal(GAME_CODE, PLAYER).json() #dictionary!
-
+            print(dataFinal)
+            print(type(dataFinal))
 
             ttk.Label(self.guessAnswerFrame,text=dataFinal["q1"],style="Side.TLabel",).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
             ttk.Label(
