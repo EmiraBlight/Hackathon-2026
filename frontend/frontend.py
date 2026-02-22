@@ -20,6 +20,42 @@ class FrontEnd:
         ttk.Style().configure(event.widget.winfo_class(), wraplength=event.widget.winfo_width())
 
     def __init__(self, root):
+
+
+        def generateGameCode():
+
+            PLAYER = '1'
+            GAME_CODE = str(randint(10000000, 99999999))
+            createRoom(GAME_CODE)
+            drawWriteAnswerFrame()
+            self.raiseFrame(self.writeAnswerFrame)
+
+        
+        def joinGame():
+            player2Connect(GAME_CODE)
+            PLAYER = '2'
+            drawWriteAnswerFrame()
+            self.raiseFrame(self.writeAnswerFrame)
+
+
+        # establish root
+        self.root = root
+        root.title("Two AIs and a Human")
+        root.columnconfigure(0, weight=1)
+        root.rowconfigure(0, weight=1)
+
+        # establish mainframe
+        mainframe = ttk.Frame(root, padding=(3, 3, 12, 12))
+        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+        mainframe.columnconfigure(0, weight=1)
+        mainframe.rowconfigure(0, weight=1)
+
+        ttk.Style().configure("Main.TButton", font=("Consolas", 50))
+        ttk.Style().configure("Main.TLabel", font=("Consolas", 50))
+        ttk.Style().configure("Side.TLabel", font=("Consolas", 30))
+        ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 30))
+        ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 30))
+
         # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
         self.mainMenu = ttk.Frame(mainframe)
 
@@ -54,40 +90,7 @@ class FrontEnd:
         for child in mainframe.winfo_children():
             child.grid_configure(sticky=(N, W, E, S), row=0, column=0)
         self.raiseFrame(self.mainMenu)
-        
-        def generateGameCode():
 
-            PLAYER = '1'
-            GAME_CODE = str(randint(10000000, 99999999))
-            createRoom(GAME_CODE)
-            drawWriteAnswerFrame()
-            self.raiseFrame(self.writeAnswerFrame)
-
-        
-        def joinGame():
-            player2Connect(GAME_CODE)
-            PLAYER = '2'
-            drawWriteAnswerFrame()
-            self.raiseFrame(self.writeAnswerFrame)
-
-
-        # establish root
-        self.root = root
-        root.title("Two AIs and a Human")
-        root.columnconfigure(0, weight=1)
-        root.rowconfigure(0, weight=1)
-
-        # establish mainframe
-        mainframe = ttk.Frame(root, padding=(3, 3, 12, 12))
-        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-        mainframe.columnconfigure(0, weight=1)
-        mainframe.rowconfigure(0, weight=1)
-
-        ttk.Style().configure("Main.TButton", font=("Consolas", 50))
-        ttk.Style().configure("Main.TLabel", font=("Consolas", 50))
-        ttk.Style().configure("Side.TLabel", font=("Consolas", 30))
-        ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 30))
-        ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 30))
 
         # waiting screen after submitting answer
         self.submitFrame = ttk.Frame(mainframe)
