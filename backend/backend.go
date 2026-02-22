@@ -101,6 +101,7 @@ func gameReady(id string) bool {
 }
 
 // player's range is 1-2, questPos 1-3
+// randomly picks 3 of our 55 pre-generated questions
 func questionGenerator(id string, player int, questPos int, real bool) {
 	byteValue, err := os.ReadFile("questions.json")
 	if err != nil {
@@ -131,6 +132,7 @@ func questionGenerator(id string, player int, questPos int, real bool) {
 	}
 }
 
+// Given a player, database returns questions 1-3, answers 1-3, and which answer was "real" (answered by a human)
 func returnQNAsOfPlayer(c *gin.Context) {
 	id := c.Query("id")
 	p := c.Query("player")
@@ -236,6 +238,7 @@ func player2Connect(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"result": "Game joined"})
 
+	// Randomly picks which strings will be prompted to the ai API, then throws them into questionGenerator
 	p1_rand1 := rand.Intn(3) + 1
 	p1_rand2 := p1_rand1
 	p1_real := p1_rand1
@@ -295,6 +298,8 @@ func isp2(id string) bool {
 }
 
 // the player's range is 1-2, and questPos' range is 1-3
+// called by questionGenerator, any questions passed into the function will be prompted to the AI
+// and update the appropiate columns of the database with the AI's result
 func fetchAndInsertAnswers(id string, player int, questPos int, questStr string) {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, nil)
