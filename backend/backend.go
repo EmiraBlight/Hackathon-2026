@@ -143,22 +143,25 @@ func questionGenerator(id string, player int, questPos int, real bool) {
 	}
 }
 
-func returnQNAsOfPlayer(c *gin.Context, player int) {
+func returnQNAsOfPlayer(c *gin.Context) {
 	id := c.Query("id")
+	p := c.Query("player")
+	player, _ := strconv.Atoi(p)
 	returnValue := make(map[string]string)
 	var queryRowValue string
 	switch player {
 	case 1:
 		for i := 1; i < 4; i++ {
-			query := fmt.Sprintf("SELECT p1_q"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			query := fmt.Sprintf("SELECT p1_q" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
 			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
 			if err != nil {
+				log.Print(query)
 				log.Fatal(err)
 			}
 			returnValue["p1_q"+strconv.Itoa(i)] = queryRowValue
 		}
 		for i := 1; i < 4; i++ {
-			query := fmt.Sprintf("SELECT p1_a"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			query := fmt.Sprintf("SELECT p1_a" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
 			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
 			if err != nil {
 				log.Fatal(err)
@@ -167,7 +170,7 @@ func returnQNAsOfPlayer(c *gin.Context, player int) {
 		}
 	case 2:
 		for i := 1; i < 4; i++ {
-			query := fmt.Sprintf("SELECT p2_q"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			query := fmt.Sprintf("SELECT p2_q" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
 			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
 			if err != nil {
 				log.Fatal(err)
@@ -175,7 +178,7 @@ func returnQNAsOfPlayer(c *gin.Context, player int) {
 			returnValue["p2_q"+strconv.Itoa(i)] = queryRowValue
 		}
 		for i := 1; i < 4; i++ {
-			query := fmt.Sprintf("SELECT p2_a"+strconv.Itoa(i)+" FROM sessions WHERE id=$1", i)
+			query := fmt.Sprintf("SELECT p2_a" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
 			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
 			if err != nil {
 				log.Fatal(err)
