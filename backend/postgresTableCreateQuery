@@ -1,4 +1,4 @@
-CREATE TABLE sessions(id CHAR(8) PRIMARY KEY, 
+CREATE TABLE sessions(id CHAR(8) PRIMARY KEY,
                         p1_q1 VARCHAR(1024),
                         p1_q2 VARCHAR(1024),
                         p1_q3 VARCHAR(1024),
@@ -11,4 +11,6 @@ CREATE TABLE sessions(id CHAR(8) PRIMARY KEY,
                         p2_a1 VARCHAR(1024),
                         p2_a2 VARCHAR(1024),
                         p2_a3 VARCHAR(1024),
-                        p2_connect_status BOOLEAN);
+                        p2_connect_status BOOLEAN,
+                        p1_real int,
+                        p2_real int);
