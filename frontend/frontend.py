@@ -27,8 +27,7 @@ class FrontEnd:
             PLAYER = '1'
             GAME_CODE = str(randint(10000000, 99999999))
             createRoom(GAME_CODE)
-            drawWriteAnswerFrame()
-            self.raiseFrame(self.writeAnswerFrame)()
+            self.raiseFrame(self.waitingFrame)()
 
         
         def joinGame():
