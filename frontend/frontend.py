@@ -27,6 +27,7 @@ class FrontEnd:
             PLAYER = '1'
             GAME_CODE = str(randint(10000000, 99999999))
             createRoom(GAME_CODE)
+            drawWaitingFrame()
             self.raiseFrame(self.waitingFrame)()
 
         
@@ -215,20 +216,22 @@ class FrontEnd:
         """
 
         # game code menu
-        self.waitingFrame = ttk.Frame(mainframe)
+        def drawWaitingFrame():
 
-        ttk.Label(
-            self.waitingFrame,
-            text="Waiting for Second Player...",
-            padding=10,
-            style="Main.TLabel",
-        ).grid(row=0, sticky="N")
-        ttk.Label(self.waitingFrame, text=GAME_CODE, padding=10, style="Main.TLabel").grid(
-            row=1
-        )
+            self.waitingFrame = ttk.Frame(mainframe)
+            self.waitingFrame.grid_configure(sticky=(N, W, E, S), row=0, column=0)
+            ttk.Label(
+                self.waitingFrame,
+                text="Waiting for Second Player...",
+                padding=10,
+                style="Main.TLabel",
+            ).grid(row=0, sticky="N")
+            ttk.Label(self.waitingFrame, text=GAME_CODE, padding=10, style="Main.TLabel").grid(
+                row=1
+            )
 
-        self.waitingFrame.columnconfigure(0, weight=1)
-        self.waitingFrame.rowconfigure(1, weight=1)
+            self.waitingFrame.columnconfigure(0, weight=1)
+            self.waitingFrame.rowconfigure(1, weight=1)
 
         # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
         self.mainMenu = ttk.Frame(mainframe)
