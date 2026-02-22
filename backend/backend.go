@@ -19,6 +19,38 @@ import (
 
 var db *pgxpool.Pool
 
+func funcSubmitAnswer(c *gin.Context) {
+	id := c.Query("id")
+	player := c.Query("player")
+	answer := c.Query("answer")
+	var q int
+	p := "p" + player + "_real"
+
+	query := fmt.Sprintf("SELECT %s FROM sessions WHERE id=$1", p)
+
+	err := db.QueryRow(context.Background(),
+		query,
+		id,
+	).Scan(&q)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "q": p})
+		return
+	}
+
+	real := "p" + player + "_a" + strconv.Itoa(q)
+	updateQuery := fmt.Sprintf("UPDATE sessions SET %s=$1 WHERE id=$2", real)
+	_, err = db.Exec(context.Background(), updateQuery, answer, id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "q": updateQuery})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"result": "Answer submitted"})
+
+}
+
 func ask(c *gin.Context) {
 	id := c.Query("id")
 	p := c.Query("p")
@@ -29,7 +61,6 @@ func ask(c *gin.Context) {
 	question, _ := strconv.Atoi(q)
 
 	fetchAndInsertAnswers(id, player, question, s)
-
 }
 
 func startGame(c *gin.Context) {
@@ -327,5 +358,6 @@ func main() {
 	router.GET("/ai", ask)
 	router.GET("/getGame", getGame)
 	router.GET("/create", create_room)
+	router.GET("/submit", funcSubmitAnswer)
 	router.Run(":2026")
 }
