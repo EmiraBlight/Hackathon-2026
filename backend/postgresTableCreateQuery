@@ -1,14 +1,23 @@
-CREATE TABLE sessions(id CHAR(8) PRIMARY KEY, 
-                        p1_q1 VARCHAR(1024),
-                        p1_q2 VARCHAR(1024),
-                        p1_q3 VARCHAR(1024),
-                        p2_q1 VARCHAR(1024),
-                        p2_q2 VARCHAR(1024),
-                        p2_q3 VARCHAR(1024),
-                        p1_a1 VARCHAR(1024),
-                        p1_a2 VARCHAR(1024),
-                        p1_a3 VARCHAR(1024),
-                        p2_a1 VARCHAR(1024),
-                        p2_a2 VARCHAR(1024),
-                        p2_a3 VARCHAR(1024),
-                        p2_connect_status BOOLEAN);
+CREATE TABLE sessions (
+    id CHAR(8) PRIMARY KEY,
+
+    p1_q1 VARCHAR(1024) NOT NULL DEFAULT '',
+    p1_q2 VARCHAR(1024) NOT NULL DEFAULT '',
+    p1_q3 VARCHAR(1024) NOT NULL DEFAULT '',
+
+    p2_q1 VARCHAR(1024) NOT NULL DEFAULT '',
+    p2_q2 VARCHAR(1024) NOT NULL DEFAULT '',
+    p2_q3 VARCHAR(1024) NOT NULL DEFAULT '',
+
+    p1_a1 VARCHAR(1024) NOT NULL DEFAULT '',
+    p1_a2 VARCHAR(1024) NOT NULL DEFAULT '',
+    p1_a3 VARCHAR(1024) NOT NULL DEFAULT '',
+
+    p2_a1 VARCHAR(1024) NOT NULL DEFAULT '',
+    p2_a2 VARCHAR(1024) NOT NULL DEFAULT '',
+    p2_a3 VARCHAR(1024) NOT NULL DEFAULT '',
+
+    p2_connect_status BOOLEAN NOT NULL DEFAULT FALSE,
+    p1_real INT NOT NULL DEFAULT 0,
+    p2_real INT NOT NULL DEFAULT 0
+);

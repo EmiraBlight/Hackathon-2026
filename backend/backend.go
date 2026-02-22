@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
@@ -229,6 +231,77 @@ func fetchAndInsertAnswers(id string, player int, questPos int, questStr string)
 	}
 }
 
+type PlayerQA struct {
+	Q1 string `json:"q1"`
+	A1 string `json:"a1"`
+	Q2 string `json:"q2"`
+	A2 string `json:"a2"`
+	Q3 string `json:"q3"`
+	A3 string `json:"a3"`
+}
+
+func getGame(c *gin.Context) {
+	id := c.Query("id")
+	player := c.Query("player")
+
+	if id == "" || player == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing id or player"})
+		return
+	}
+
+	if !gameReady(id) {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": "game not ready"})
+		return
+	}
+
+	var query string
+
+	switch player {
+	case "1":
+		query = `
+				SELECT p1_q1, p1_a1,
+				       p1_q2, p1_a2,
+				       p1_q3, p1_a3
+				FROM sessions
+				WHERE id = $1
+			`
+	case "2":
+		query = `
+				SELECT p2_q1, p2_a1,
+				       p2_q2, p2_a2,
+				       p2_q3, p2_a3
+				FROM sessions
+				WHERE id = $1
+			`
+	default:
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid player"})
+		return
+	}
+
+	var result PlayerQA
+
+	err := db.QueryRow(
+		c.Request.Context(),
+		query,
+		id,
+	).Scan(
+		&result.Q1, &result.A1,
+		&result.Q2, &result.A2,
+		&result.Q3, &result.A3,
+	)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "game not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 func main() {
 	e := godotenv.Load() //load enviorment variables from .env file
 	if e != nil {
@@ -250,5 +323,7 @@ func main() {
 	router.GET("/join", player2Connect)
 	router.GET("/start", startGame)
 	router.GET("/ai", ask)
+	router.GET("/getGame", getGame)
+	router.GET("/create", create_room)
 	router.Run(":2026")
 }
