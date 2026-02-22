@@ -256,10 +256,9 @@ class FrontEnd:
         self.mainMenu = ttk.Frame(mainframe)
         global GAME_CODE_not
         GAME_CODE_not = StringVar()
-        ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_not).grid(
-            row=2, column=1, sticky="W, E"
-        )
-
+        entry12 = ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_not)
+        entry12.grid(row=2, column=1, sticky="W, E")
+        GAME_CODE_not = entry12.get()
 
         ttk.Label(
             self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
