@@ -160,32 +160,10 @@ func returnQNAsOfPlayer(c *gin.Context) {
 	switch player {
 	case 1:
 		for i := 1; i < 4; i++ {
-			query := fmt.Sprintf("SELECT p1_q" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
-			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
-			if err != nil {
-				log.Print(query)
-				log.Fatal(err)
-			}
-			returnValue["p1_q"+strconv.Itoa(i)] = queryRowValue
-		}
-		for i := 1; i < 4; i++ {
-			query := fmt.Sprintf("SELECT p1_a" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
-			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
-			if err != nil {
-				log.Fatal(err)
-			}
-			returnValue["p1_a"+strconv.Itoa(i)] = queryRowValue
-		}
-		err := db.QueryRow(context.Background(), `SELECT p1_real FROM sessions WHERE id=$1`, id).Scan(&queryRowValue)
-		if err != nil {
-			log.Fatal(err)
-		}
-		returnValue["p1_real"] = queryRowValue
-	case 2:
-		for i := 1; i < 4; i++ {
 			query := fmt.Sprintf("SELECT p2_q" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
 			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
 			if err != nil {
+				log.Print(query)
 				log.Fatal(err)
 			}
 			returnValue["p2_q"+strconv.Itoa(i)] = queryRowValue
@@ -203,6 +181,28 @@ func returnQNAsOfPlayer(c *gin.Context) {
 			log.Fatal(err)
 		}
 		returnValue["p2_real"] = queryRowValue
+	case 2:
+		for i := 1; i < 4; i++ {
+			query := fmt.Sprintf("SELECT p1_q" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
+			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
+			if err != nil {
+				log.Fatal(err)
+			}
+			returnValue["p1_q"+strconv.Itoa(i)] = queryRowValue
+		}
+		for i := 1; i < 4; i++ {
+			query := fmt.Sprintf("SELECT p1_a" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
+			err := db.QueryRow(context.Background(), query, id).Scan(&queryRowValue)
+			if err != nil {
+				log.Fatal(err)
+			}
+			returnValue["p1_a"+strconv.Itoa(i)] = queryRowValue
+		}
+		err := db.QueryRow(context.Background(), `SELECT p1_real FROM sessions WHERE id=$1`, id).Scan(&queryRowValue)
+		if err != nil {
+			log.Fatal(err)
+		}
+		returnValue["p1_real"] = queryRowValue
 	}
 	c.JSON(http.StatusOK, returnValue)
 }

@@ -32,7 +32,7 @@ class FrontEnd:
                     return
                 time.sleep(3)
         def giveAnswer():
-            self.raiseFrame(self.submitFrame)
+            self.raiseFrame(self.submitFrame)()
             if data[1] == "":
                 giveEntry = ent1.get()
             elif data[3] == "":
@@ -40,6 +40,15 @@ class FrontEnd:
             else:
                 giveEntry = ent3.get()
             submitAnswer(GAME_CODE, PLAYER, giveEntry)
+
+        def wait_for_player_results():
+            while True:
+                x=getFinal(GAME_CODE, PLAYER)()
+                if x.status_code==200:
+                    drawGuessAnswerFrame()
+                    self.raiseFrame(self.guessAnswerFrame)()
+                    return
+                time.sleep(3)
 
         def generateGameCode():
             global PLAYER, GAME_CODE

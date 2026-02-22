@@ -38,3 +38,7 @@ def submitAnswer(gameCode: str, player: str, answer: str) -> Response:
 def checkGame(gameCode:str, player:str):
     payload = {"id": gameCode, "player": player}
     return requests.get(f"{URL}/getGame", params=payload).status_code == 200
+
+ def getFinal(id: str, player:str)->Request:
+   payload = {"id":id,"player":player}
+   return requests.get(URL+"/qnaOfPlayer",params=payload)
