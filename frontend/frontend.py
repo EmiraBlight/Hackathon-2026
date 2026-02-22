@@ -28,17 +28,28 @@ class FrontEnd:
         ttk.Style().configure("Main.TButton", font=("Consolas", 50))
         ttk.Style().configure("Main.TLabel", font=("Consolas", 50))
 
+        # guess answer menu
+
+        self.guessAnswerFrame = ttk.Frame(mainframe)
+
         # write answer menu
         self.writeAnswerFrame = ttk.Frame(mainframe)
 
-        # write questions menu
-        self.writeQuestionsFrame = ttk.Frame(mainframe)
+        ttk.Label(self.writeAnswerFrame, text="Write Answer", padding=10, style="Main.TLabel").grid(row=0, column=1, sticky="N")
 
+        for i in range(1, 6, 2):
+            ttk.Label(self.writeAnswerFrame, text=f"Q{int((i+1)/2)}:").grid(row=i, column=0, sticky="W")
+            ttk.Label(self.writeAnswerFrame, text=f"A{int((i+1)/2)}:").grid(row=i+1, column=0, sticky="W")
+            ttk.Entry(self.writeAnswerFrame).grid(row=i+1, column=1, sticky="W")
+
+        # write questions menu
+        """
+        self.writeQuestionsFrame = ttk.Frame(mainframe)
         ttk.Label(self.writeQuestionsFrame, text="Write Questions", padding=10, style="Main.TLabel").grid(row=0, column=1,sticky="N")
         for i in range(1, 4):
             ttk.Label(self.writeQuestionsFrame, text=f"Q{i}:").grid(row=i, column=0, sticky="W")
             ttk.Entry(self.writeQuestionsFrame).grid(row=i, column=1, sticky="W, E") #TODO this
-        
+        """
 
         # game code menu
         self.waitingFrame = ttk.Frame(mainframe)
@@ -54,7 +65,7 @@ class FrontEnd:
 
         ttk.Label(self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel").grid(row=0)
         ttk.Button(self.mainMenu, text="Create Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.waitingFrame)).grid(row=1)
-        ttk.Button(self.mainMenu, text="Join Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.writeQuestionsFrame)).grid(row=2) # TODO: add a function to validate join code with a generated game code on backend
+        ttk.Button(self.mainMenu, text="Join Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.writeAnswerFrame)).grid(row=2) # TODO: add a function to validate join code with a generated game code on backend
 
         self.mainMenu.columnconfigure(0, weight=1)
         self.mainMenu.rowconfigure((0, 1, 2), weight=1)
