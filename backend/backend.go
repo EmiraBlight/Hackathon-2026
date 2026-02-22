@@ -134,6 +134,26 @@ func questionGenerator(id string, player int, questPos int, real bool) {
 func returnQNAsOfPlayer(c *gin.Context) {
 	id := c.Query("id")
 	p := c.Query("player")
+	var hasfilled bool
+	err := db.QueryRow(context.Background(),
+		`SELECT (
+    (p1_a1 <> '')::int +
+    (p1_a2 <> '')::int +
+    (p1_a3 <> '')::int +
+    (p2_a1 <> '')::int +
+    (p2_a2 <> '')::int +
+    (p2_a3 <> '')::int
+    ) = 6
+	FROM sessions
+	WHERE id = $1`,
+		id,
+	).Scan(&hasfilled)
+
+	if !hasfilled || err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "Not ready"})
+		return
+	}
+
 	player, _ := strconv.Atoi(p)
 	returnValue := make(map[string]string)
 	var queryRowValue string
