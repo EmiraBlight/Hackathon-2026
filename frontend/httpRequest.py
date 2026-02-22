@@ -1,5 +1,6 @@
 import requests
 from requests.models import Response
+from requests.sessions import Request
 
 URL = "http://10.109.206.111:2026"
 
@@ -18,9 +19,11 @@ def createRoom(gameCode: str) -> Response:
     return requests.get(f"{URL}/create", params=payload)
 
 
-def getGame(gameCode: str, player: str) -> Response:
+def getGame(gameCode: str, player: str):
     payload = {"id": gameCode, "player": player}
-    return requests.get(f"{URL}/getGame", params=payload)
+    result = requests.get(f"{URL}/getGame", params=payload)
+    for i in dict(result.json()).keys():
+        yield result.json()[i]
 
 
 def join(gameCode: str) -> Response:
