@@ -4,7 +4,7 @@ from requests.models import Response
 URL = "http://10.109.206.111:2026"
 
 
-def ping():
+def ping() -> bool:
     return requests.get("http://10.109.206.111:2026/ping").json()["message"] == "pong"
 
 
@@ -21,6 +21,11 @@ def createRoom(gameCode: str) -> Response:
 def getGame(gameCode: str, player: str) -> Response:
     payload = {"id": gameCode, "player": player}
     return requests.get(URL + "/getGame", params=payload)
+
+
+def join(gameCode: str) -> Response:
+    payload = {"id": gameCode}
+    return requests.get(URL + "/join", params=payload)
 
 
 def submitAnswer(gameCode: str, player: str, answer: str) -> Response:
