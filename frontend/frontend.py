@@ -42,12 +42,22 @@ class FrontEnd:
 
         def giveAnswer():
             self.raiseFrame(self.submitFrame)()
+            moronSpeech = "Some moron typed in nothing on their prompt. Enjoy your free win."
             if data[1] == "":
-                giveEntry = ent1.get()
+                if ent1.get() == "":
+                    giveEntry = moronSpeech
+                else:
+                    giveEntry = ent1.get()
             elif data[3] == "":
-                giveEntry = ent2.get()
+                if ent2.get() == "":
+                    giveEntry = moronSpeech
+                else:
+                    giveEntry = ent2.get()
             else:
-                giveEntry = ent3.get()
+                if ent3.get() == "":
+                    giveEntry = moronSpeech
+                else:
+                    giveEntry = ent3.get()
             submitAnswer(GAME_CODE, PLAYER, giveEntry)
             t=threading.Thread(target=wait_for_player_results)
             t.start()
@@ -61,7 +71,7 @@ class FrontEnd:
             self.raiseFrame(self.waitingFrame)()
             thread = threading.Thread(target=wait_for_player)
             thread.start()
-            
+
         def joinGame():
             global PLAYER, GAME_CODE
             GAME_CODE = entry12.get()
@@ -118,7 +128,7 @@ class FrontEnd:
                 ).grid(row=i + 1, column=1, sticky="W, N")
 
             dataFinal = getFinal(GAME_CODE, PLAYER).json() #dictionary!
-            
+
             ttk.Label(self.guessAnswerFrame,text=dataFinal["q1"],style="Side.TLabel",).grid(row=1, column=2, sticky=(E, W))
             ttk.Label(
                 self.guessAnswerFrame,
@@ -169,7 +179,11 @@ class FrontEnd:
                 style="sideButton.TRadiobutton",
             ).grid(row=6, column=0, sticky="WE")
             if int(answer.get()) == dataFinal["real"]:
-                print("WINNNNNNN")
+                drawWinCondition(True)
+                # some function to declare user won
+            else:
+                drawWinCondition(False)
+                # some function to declare user lost
             ttk.Button(
                 self.guessAnswerFrame,
                 text="Submit",
@@ -181,6 +195,16 @@ class FrontEnd:
             )  # TODO: Add a function to submit answer to backend and backend responds with whether the user was correct
 
             self.guessAnswerFrame.columnconfigure(2, weight=1)
+
+        def drawWinCondition(bool):
+            self.writeWinConditionFrame = ttk.Frame(mainframe)
+            self.writeWinConditionFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
+            if bool:
+                ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
+            else:
+                ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
+
+
 
         # write answer menu
         def drawWriteAnswerFrame():
@@ -267,18 +291,18 @@ class FrontEnd:
         global GAME_CODE_VAR
         GAME_CODE_VAR = StringVar()
         entry12 = ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_VAR)
-        entry12.grid(row=2, column=1, sticky="W, E")
+        entry12.grid(row=2, column=0, pady=10)
 
         ttk.Label(
             self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
-        ).grid(row=0)
+        ).grid(row=0, column=0)
         ttk.Button(
             self.mainMenu,
             text="Create Game",
             padding=10,
             style="Main.TButton",
             command=generateGameCode,
-        ).grid(row=1)
+        ).grid(row=1, column=0)
         ttk.Button(
             self.mainMenu,
             text="Join Game",
@@ -286,7 +310,7 @@ class FrontEnd:
             style="Main.TButton",
             command=joinGame,
         ).grid(
-            row=3
+            row=3, column=0
         )
 
         self.mainMenu.columnconfigure(0, weight=1)
