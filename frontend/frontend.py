@@ -31,7 +31,14 @@ class FrontEnd:
                     self.raiseFrame(self.writeAnswerFrame)()
                     return
                 time.sleep(3)
-
+        def giveAnswer():
+            if data[1] == "":
+                giveEntry = ent1.get()
+            elif data[3] == "":
+                giveEntry = ent2.get()
+            else:
+                giveEntry = ent3.get()
+            join(giveEntry)
 
         def generateGameCode():
             global PLAYER, GAME_CODE
@@ -52,7 +59,7 @@ class FrontEnd:
             thread = threading.Thread(target=wait_for_player)
             thread.start()
 
-
+        
 
 
         # establish root
@@ -196,6 +203,7 @@ class FrontEnd:
                 row=7, column=1
             )  # TODO: Add a function to submit answer to backend and draw next frame
 
+            global data
             data = list(getGame(GAME_CODE, PLAYER))
             entryValue = StringVar()
 
@@ -203,18 +211,22 @@ class FrontEnd:
             ttk.Label(self.writeAnswerFrame, text=data[2], style="Side.TLabel").grid(row=3, column=1, sticky="W, E")
             ttk.Label(self.writeAnswerFrame, text=data[4], style="Side.TLabel").grid(row=5, column=1, sticky="W, E")
             if data[1] == "":
-                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue).grid(row=2, column=1, sticky="W, E")
+                ent1 = ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue)
+                ent.grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[5], style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
             elif data[3] == "":
-                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue).grid(row=4, column=1, sticky="W, E")
+                ent2 = ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue)
+                ent2.grid(row=4, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[5], style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
             else:
-                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue).grid(row=6, column=1, sticky="W, E")
+                ent3 = ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue)
+                ent3.grid(row=6, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
-            join(entryValue)
+
+
 
 
 
