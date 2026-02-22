@@ -8,9 +8,7 @@ from httpRequest import *
 GAME_CODE: str = ""
 PLAYER: str = ""
 
-
 class FrontEnd:
-
 
     @staticmethod
     def raiseFrame(frame: ttk.Frame):
@@ -22,22 +20,21 @@ class FrontEnd:
 
     def __init__(self, root):
 
+        #Stalls the program until a 2nd player joins the game
         def wait_for_player():
             while True:
-                x=checkGame(GAME_CODE, PLAYER)
-                print(x)
-                if x:
+                ready=checkGame(GAME_CODE, PLAYER)
+                if ready:
                     drawWriteAnswerFrame()
                     self.raiseFrame(self.writeAnswerFrame)()
                     return
                 time.sleep(3)
 
+        #Stalls the program until the results of the other player are submitted
         def wait_for_player_results():
             while True:
-                x=getFinal(GAME_CODE, PLAYER)
-                print(x.status_code)
-                print(x)
-                if x.status_code==200:
+                received=getFinal(GAME_CODE, PLAYER)
+                if received.status_code==200:
                     drawGuessAnswerFrame()
                     self.raiseFrame(self.guessAnswerFrame)()
                     return
@@ -54,9 +51,6 @@ class FrontEnd:
             submitAnswer(GAME_CODE, PLAYER, giveEntry)
             t=threading.Thread(target=wait_for_player_results)
             t.start()
-            
-
-        
 
         def generateGameCode():
             global PLAYER, GAME_CODE
@@ -68,7 +62,6 @@ class FrontEnd:
             thread = threading.Thread(target=wait_for_player)
             thread.start()
             
-        
         def joinGame():
             global PLAYER, GAME_CODE
             GAME_CODE = entry12.get()
@@ -76,9 +69,6 @@ class FrontEnd:
             PLAYER = '2'
             thread = threading.Thread(target=wait_for_player)
             thread.start()
-
-        
-
 
         # establish root
         self.root = root
@@ -98,9 +88,6 @@ class FrontEnd:
         ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 24))
         ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 24))
 
-
-
-
         # waiting screen after submitting answer
         self.submitFrame = ttk.Frame(mainframe)
 
@@ -109,6 +96,7 @@ class FrontEnd:
         ).grid(row=0, column=0, sticky="N")
 
         self.submitFrame.columnconfigure(0, weight=1)
+
         # guess answer menu
         def drawGuessAnswerFrame():
             self.guessAnswerFrame = ttk.Frame(mainframe)
@@ -129,12 +117,9 @@ class FrontEnd:
                     self.guessAnswerFrame, text=f"A{int((i + 1) / 2)}:", style="Side.TLabel"
                 ).grid(row=i + 1, column=1, sticky="W, N")
 
-
             dataFinal = getFinal(GAME_CODE, PLAYER).json() #dictionary!
-            print(dataFinal)
-            print(type(dataFinal))
-
-            ttk.Label(self.guessAnswerFrame,text=dataFinal["q1"],style="Side.TLabel",).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
+            
+            ttk.Label(self.guessAnswerFrame,text=dataFinal["q1"],style="Side.TLabel",).grid(row=1, column=2, sticky=(E, W))
             ttk.Label(
                 self.guessAnswerFrame,
                 text=dataFinal["a1"],
@@ -215,14 +200,13 @@ class FrontEnd:
                 ).grid(row=i + 1, column=0, sticky="W")
 
             ttk.Button(
-                self.writeAnswerFrame,text="Submit",padding=10,style="Main.TButton",command=giveAnswer,).grid(row=7, column=1)  # TODO: Add a function to submit answer to backend and draw next frame
+                self.writeAnswerFrame,text="Submit",padding=10,style="Main.TButton",command=giveAnswer,).grid(row=7, column=1)
 
             global data
             data = list(getGame(GAME_CODE, PLAYER))
             entryValue = StringVar()
             
-
-            ttk.Label(self.writeAnswerFrame, text=data[0], style="Side.TLabel").grid(row=1, column=1, sticky="W, E")  # TODO: backend
+            ttk.Label(self.writeAnswerFrame, text=data[0], style="Side.TLabel").grid(row=1, column=1, sticky="W, E")
             ttk.Label(self.writeAnswerFrame, text=data[2], style="Side.TLabel").grid(row=3, column=1, sticky="W, E")
             ttk.Label(self.writeAnswerFrame, text=data[4], style="Side.TLabel").grid(row=5, column=1, sticky="W, E")
             if data[1] == "":
@@ -243,10 +227,6 @@ class FrontEnd:
                 ent3.grid(row=6, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
-
-
-
-
 
             for widget in self.writeAnswerFrame.winfo_children():
                 if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 1:
@@ -284,12 +264,10 @@ class FrontEnd:
 
         # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
         self.mainMenu = ttk.Frame(mainframe)
-        global GAME_CODE_not
-        GAME_CODE_not = StringVar()
-        entry12 = ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_not)
+        global GAME_CODE_VAR
+        GAME_CODE_VAR = StringVar()
+        entry12 = ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_VAR)
         entry12.grid(row=2, column=1, sticky="W, E")
-
-        print(GAME_CODE_not)
 
         ttk.Label(
             self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
@@ -309,7 +287,7 @@ class FrontEnd:
             command=joinGame,
         ).grid(
             row=3
-        )  # TODO: add a function to validate join code with a generated game code on backend
+        )
 
         self.mainMenu.columnconfigure(0, weight=1)
         self.mainMenu.rowconfigure((0, 1, 2), weight=1)
