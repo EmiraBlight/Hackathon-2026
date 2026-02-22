@@ -34,6 +34,12 @@ class FrontEnd:
         # write questions menu
         self.writeQuestionsFrame = ttk.Frame(mainframe)
 
+        ttk.Label(self.writeQuestionsFrame, text="Write Questions", padding=10, style="Main.TLabel").grid(row=0, column=1,sticky="N")
+        for i in range(1, 4):
+            ttk.Label(self.writeQuestionsFrame, text=f"Q{i}:").grid(row=i, column=0, sticky="W")
+            ttk.Entry(self.writeQuestionsFrame).grid(row=i, column=1, sticky="W, E") #TODO this
+        
+
         # game code menu
         self.waitingFrame = ttk.Frame(mainframe)
         
@@ -48,7 +54,7 @@ class FrontEnd:
 
         ttk.Label(self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel").grid(row=0)
         ttk.Button(self.mainMenu, text="Create Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.waitingFrame)).grid(row=1)
-        ttk.Button(self.mainMenu, text="Join Game", padding=10, style="Main.TButton").grid(row=2) # TODO: add a function to validate join code with a generated game code on backend
+        ttk.Button(self.mainMenu, text="Join Game", padding=10, style="Main.TButton", command=self.raiseFrame(self.writeQuestionsFrame)).grid(row=2) # TODO: add a function to validate join code with a generated game code on backend
 
         self.mainMenu.columnconfigure(0, weight=1)
         self.mainMenu.rowconfigure((0, 1, 2), weight=1)
