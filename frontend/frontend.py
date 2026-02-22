@@ -33,31 +33,38 @@ class FrontEnd:
         ttk.Style().configure("Main.TLabel", font=("Consolas", 50))
         ttk.Style().configure("Side.TLabel", font=("Consolas", 30))
         ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 30))
+        ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 30))
 
         # guess answer menu
         self.guessAnswerFrame = ttk.Frame(mainframe)
 
 
-        ttk.Label(self.guessAnswerFrame, text="Guess Human Answer", padding=10, style="Main.TLabel").grid(row=0, column=1, sticky="N")
+        ttk.Label(self.guessAnswerFrame, text="Guess Human Answer", padding=10, style="Main.TLabel").grid(row=0, column=0, sticky="N", columnspan=3)
 
         for i in range(1, 6, 2):
-            ttk.Label(self.guessAnswerFrame, text=f"Q{int((i+1)/2)}:", style="Side.TLabel").grid(row=i, column=0, sticky="W, N")
-            ttk.Label(self.guessAnswerFrame, text=f"A{int((i+1)/2)}:", style="Side.TLabel").grid(row=i+1, column=0, sticky="W, N")
+            ttk.Label(self.guessAnswerFrame, text=f"Q{int((i+1)/2)}:", style="Side.TLabel").grid(row=i, column=1, sticky="W, N")
+            ttk.Label(self.guessAnswerFrame, text=f"A{int((i+1)/2)}:", style="Side.TLabel").grid(row=i+1, column=1, sticky="W, N")
 
-        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_QUESTION1", style="Side.TLabel", anchor=NW).grid(row=1, column=1, sticky=(E, W)) #TODO: backend
-        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_ANSWER1", style="Side.TLabel").grid(row=2, column=1, sticky=(E, W))
-        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_QUESTION2", style="Side.TLabel").grid(row=3, column=1, sticky="W, E")
-        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_ANSWER2", style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
-        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_QUESTION3", style="Side.TLabel").grid(row=5, column=1, sticky="W, E")
-        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_ANSWER3", style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
+        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_QUESTION1", style="Side.TLabel").grid(row=1, column=2, sticky=(E, W)) #TODO: backend
+        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_ANSWER1", style="Side.TLabel").grid(row=2, column=2, sticky=(E, W))
+        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_QUESTION2", style="Side.TLabel").grid(row=3, column=2, sticky="W, E")
+        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_ANSWER2", style="Side.TLabel").grid(row=4, column=2, sticky="W, E")
+        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_QUESTION3", style="Side.TLabel").grid(row=5, column=2, sticky="W, E")
+        ttk.Label(self.guessAnswerFrame, text="H2_PLACEHOLDER_ANSWER3", style="Side.TLabel").grid(row=6, column=2, sticky="W, E")
         for widget in self.guessAnswerFrame.winfo_children():
-            if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 1:
+            if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 2:
                 widget.bind("<Configure>", self.wrapUpdate)
 
-        ttk.Button(self.guessAnswerFrame, text="Submit", padding=10, style="Main.TButton").grid(row=7, column=1) #TODO: Add a function to submit answer to backend and backend responds with whether the user was correct
+        answer = 1
+        ttk.Radiobutton(self.guessAnswerFrame, variable=answer, value='answer1', style="sideButton.TRadiobutton").grid(row=2, column=0, sticky="WE")
+        ttk.Radiobutton(self.guessAnswerFrame, variable=answer, value='answer2', style="sideButton.TRadiobutton").grid(row=4, column=0, sticky="WE")
+        ttk.Radiobutton(self.guessAnswerFrame, variable=answer, value='answer3', style="sideButton.TRadiobutton").grid(row=6, column=0, sticky="WE")
 
 
-        self.guessAnswerFrame.columnconfigure(1, weight=1)
+        ttk.Button(self.guessAnswerFrame, text="Submit", padding=10, style="Main.TButton").grid(row=7, column=0, columnspan=3) #TODO: Add a function to submit answer to backend and backend responds with whether the user was correct
+
+
+        self.guessAnswerFrame.columnconfigure(2, weight=1)
 
 
         # write answer menu
