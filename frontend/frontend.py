@@ -2,12 +2,14 @@ from tkinter import *
 from tkinter import ttk
 from random import randint
 
-class Frontend:
+class FrontEnd:
 
-    def generate_game_code(self):
+    @staticmethod
+    def generateGameCode():
         return str(randint(10000000, 99999999))
 
-    def raiseFrame(self, frame: ttk.Frame):
+    @staticmethod
+    def raiseFrame(frame: ttk.Frame):
         return lambda: frame.tkraise()
 
     def __init__(self, root):
@@ -56,7 +58,6 @@ class Frontend:
         self.raiseFrame(self.mainMenu)
 
 root = Tk()
-Frontend(root)
-root.state('zoomed')
+FrontEnd(root)
 
 root.mainloop()
