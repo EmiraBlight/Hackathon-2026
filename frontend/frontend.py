@@ -181,7 +181,7 @@ class FrontEnd:
                 value=3,
                 style="sideButton.TRadiobutton",
             ).grid(row=6, column=0, sticky="WE")
-            if int(answer.get()) == dataFinal["real"]
+            if int(answer.get()) == dataFinal["real"]:
                 print("WINNNNNNN")
             ttk.Button(
                 self.guessAnswerFrame,
