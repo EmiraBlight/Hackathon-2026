@@ -23,7 +23,7 @@ class FrontEnd:
 
 
         def generateGameCode():
-
+            global PLAYER, GAME_CODE
             PLAYER = '1'
             GAME_CODE = str(randint(10000000, 99999999))
             createRoom(GAME_CODE)
@@ -32,6 +32,7 @@ class FrontEnd:
 
         
         def joinGame():
+            global PLAYER, GAME_CODE
             player2Connect(GAME_CODE)
             PLAYER = '2'
             drawWriteAnswerFrame()
@@ -155,6 +156,7 @@ class FrontEnd:
         # write answer menu
         def drawWriteAnswerFrame():
             self.writeAnswerFrame = ttk.Frame(mainframe)
+            self.writeAnswerFrame.grid_configure(sticky=(S, E, W), row=0, column=0)
 
             ttk.Label(
                 self.writeAnswerFrame, text="Write Answer", padding=10, style="Main.TLabel"
