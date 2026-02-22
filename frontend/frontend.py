@@ -46,7 +46,7 @@ class FrontEnd:
         
         def joinGame():
             global PLAYER, GAME_CODE
-            GAME_CODE=GAME_CODE_not
+            GAME_CODE = entry12.get()
             join(GAME_CODE)
             PLAYER = '2'
             thread = threading.Thread(target=wait_for_player)
@@ -258,7 +258,8 @@ class FrontEnd:
         GAME_CODE_not = StringVar()
         entry12 = ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_not)
         entry12.grid(row=2, column=1, sticky="W, E")
-        GAME_CODE_not = entry12.get()
+
+        print(GAME_CODE_not)
 
         ttk.Label(
             self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
