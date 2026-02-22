@@ -193,23 +193,24 @@ class FrontEnd:
             )  # TODO: Add a function to submit answer to backend and draw next frame
 
             data = list(getGame(GAME_CODE, PLAYER))
+            entryValue = StringVar()
 
             ttk.Label(self.writeAnswerFrame, text=data[0], style="Side.TLabel").grid(row=1, column=1, sticky="W, E")  # TODO: backend
             ttk.Label(self.writeAnswerFrame, text=data[2], style="Side.TLabel").grid(row=3, column=1, sticky="W, E")
             ttk.Label(self.writeAnswerFrame, text=data[4], style="Side.TLabel").grid(row=5, column=1, sticky="W, E")
             if data[1] == "":
-                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24)).grid(row=2, column=1, sticky="W, E")
+                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue).grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[5], style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
             elif data[3] == "":
-                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24)).grid(row=4, column=1, sticky="W, E")
+                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue).grid(row=4, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[5], style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
             else:
-                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24)).grid(row=6, column=1, sticky="W, E")
+                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24), textvariable=entryValue).grid(row=6, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
                 ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
-
+            join(entryValue)
 
 
 
