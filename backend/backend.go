@@ -166,7 +166,7 @@ func returnQNAsOfPlayer(c *gin.Context) {
 				log.Print(query)
 				log.Fatal(err)
 			}
-			returnValue["p2_q"+strconv.Itoa(i)] = queryRowValue
+			returnValue["q"+strconv.Itoa(i)] = queryRowValue
 		}
 		for i := 1; i < 4; i++ {
 			query := fmt.Sprintf("SELECT p2_a" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")
@@ -174,13 +174,13 @@ func returnQNAsOfPlayer(c *gin.Context) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			returnValue["p2_a"+strconv.Itoa(i)] = queryRowValue
+			returnValue["a"+strconv.Itoa(i)] = queryRowValue
 		}
 		err := db.QueryRow(context.Background(), `SELECT p2_real FROM sessions WHERE id=$1`, id).Scan(&queryRowValue)
 		if err != nil {
 			log.Fatal(err)
 		}
-		returnValue["p2_real"] = queryRowValue
+		returnValue["real"] = queryRowValue
 	case 2:
 		for i := 1; i < 4; i++ {
 			query := fmt.Sprintf("SELECT p1_q" + strconv.Itoa(i) + " FROM sessions WHERE id=$1")

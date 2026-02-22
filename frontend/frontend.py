@@ -54,6 +54,7 @@ class FrontEnd:
             submitAnswer(GAME_CODE, PLAYER, giveEntry)
             t=threading.Thread(target=wait_for_player_results)
             t.start()
+            
 
         
 
@@ -127,60 +128,61 @@ class FrontEnd:
                     self.guessAnswerFrame, text=f"A{int((i + 1) / 2)}:", style="Side.TLabel"
                 ).grid(row=i + 1, column=1, sticky="W, N")
 
+
+            dataFinal = getFinal(GAME_CODE, PLAYER) #dictionary!
+
+
+            ttk.Label(self.guessAnswerFrame,text=dataFinal["q1"],style="Side.TLabel",).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(next(getGame(GAME_CODE, PLAYER))),
-                style="Side.TLabel",
-            ).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
-            ttk.Label(
-                self.guessAnswerFrame,
-                text=str(next(getGame(GAME_CODE, PLAYER))),
+                text=dataFinal["a1"],
                 style="Side.TLabel",
             ).grid(row=2, column=2, sticky=(E, W))
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(next(getGame(GAME_CODE, PLAYER))),
+                text=dataFinal["q2"],
                 style="Side.TLabel",
             ).grid(row=3, column=2, sticky="W, E")
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(next(getGame(GAME_CODE, PLAYER))),
+                text=dataFinal["a2"],
                 style="Side.TLabel",
             ).grid(row=4, column=2, sticky="W, E")
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(next(getGame(GAME_CODE, PLAYER))),
+                text=dataFinal["q3"],
                 style="Side.TLabel",
             ).grid(row=5, column=2, sticky="W, E")
             ttk.Label(
                 self.guessAnswerFrame,
-                text=str(next(getGame(GAME_CODE, PLAYER))),
+                text=dataFinal["a3"],
                 style="Side.TLabel",
             ).grid(row=6, column=2, sticky="W, E")
             for widget in self.guessAnswerFrame.winfo_children():
                 if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 2:
                     widget.bind("<Configure>", self.wrapUpdate)
 
-            answer = 1
+            answer = IntVar()
             ttk.Radiobutton(
                 self.guessAnswerFrame,
                 variable=answer,
-                value="answer1",
+                value=1,
                 style="sideButton.TRadiobutton",
             ).grid(row=2, column=0, sticky="WE")
             ttk.Radiobutton(
                 self.guessAnswerFrame,
                 variable=answer,
-                value="answer2",
+                value=2,
                 style="sideButton.TRadiobutton",
             ).grid(row=4, column=0, sticky="WE")
             ttk.Radiobutton(
                 self.guessAnswerFrame,
                 variable=answer,
-                value="answer3",
+                value=3,
                 style="sideButton.TRadiobutton",
             ).grid(row=6, column=0, sticky="WE")
-
+            if int(answer.get()) == dataFinal["real"]
+                print("WINNNNNNN")
             ttk.Button(
                 self.guessAnswerFrame,
                 text="Submit",
