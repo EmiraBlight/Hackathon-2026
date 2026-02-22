@@ -26,6 +26,7 @@ class FrontEnd:
             PLAYER = '1'
             GAME_CODE = str(randint(10000000, 99999999))
             createRoom(GAME_CODE)
+            pass
 
 
         # establish root
@@ -71,40 +72,40 @@ class FrontEnd:
             ttk.Label(
                 self.guessAnswerFrame, text=f"A{int((i + 1) / 2)}:", style="Side.TLabel"
             ).grid(row=i + 1, column=1, sticky="W, N")
-
-        ttk.Label(
-            self.guessAnswerFrame,
-            text=str(getGame(GAME_CODE, PLAYER)),
-            style="Side.TLabel",
-        ).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
-        ttk.Label(
-            self.guessAnswerFrame,
-            text=str(getGame(GAME_CODE, PLAYER)),
-            style="Side.TLabel",
-        ).grid(row=2, column=2, sticky=(E, W))
-        ttk.Label(
-            self.guessAnswerFrame,
-            text=str(getGame(GAME_CODE, PLAYER)),
-            style="Side.TLabel",
-        ).grid(row=3, column=2, sticky="W, E")
-        ttk.Label(
-            self.guessAnswerFrame,
-            text=str(getGame(GAME_CODE, PLAYER)),
-            style="Side.TLabel",
-        ).grid(row=4, column=2, sticky="W, E")
-        ttk.Label(
-            self.guessAnswerFrame,
-            text=str(getGame(GAME_CODE, PLAYER)),
-            style="Side.TLabel",
-        ).grid(row=5, column=2, sticky="W, E")
-        ttk.Label(
-            self.guessAnswerFrame,
-            text=str(getGame(GAME_CODE, PLAYER)),
-            style="Side.TLabel",
-        ).grid(row=6, column=2, sticky="W, E")
-        for widget in self.guessAnswerFrame.winfo_children():
-            if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 2:
-                widget.bind("<Configure>", self.wrapUpdate)
+        def drawGuessAnswerFrame():
+            ttk.Label(
+                self.guessAnswerFrame,
+                text=str(getGame(GAME_CODE, PLAYER)),
+                style="Side.TLabel",
+            ).grid(row=1, column=2, sticky=(E, W))  # TODO: backend
+            ttk.Label(
+                self.guessAnswerFrame,
+                text=str(getGame(GAME_CODE, PLAYER)),
+                style="Side.TLabel",
+            ).grid(row=2, column=2, sticky=(E, W))
+            ttk.Label(
+                self.guessAnswerFrame,
+                text=str(getGame(GAME_CODE, PLAYER)),
+                style="Side.TLabel",
+            ).grid(row=3, column=2, sticky="W, E")
+            ttk.Label(
+                self.guessAnswerFrame,
+                text=str(getGame(GAME_CODE, PLAYER)),
+                style="Side.TLabel",
+            ).grid(row=4, column=2, sticky="W, E")
+            ttk.Label(
+                self.guessAnswerFrame,
+                text=str(getGame(GAME_CODE, PLAYER)),
+                style="Side.TLabel",
+            ).grid(row=5, column=2, sticky="W, E")
+            ttk.Label(
+                self.guessAnswerFrame,
+                text=str(getGame(GAME_CODE, PLAYER)),
+                style="Side.TLabel",
+            ).grid(row=6, column=2, sticky="W, E")
+            for widget in self.guessAnswerFrame.winfo_children():
+                if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 2:
+                    widget.bind("<Configure>", self.wrapUpdate)
 
         answer = 1
         ttk.Radiobutton(
@@ -206,7 +207,7 @@ class FrontEnd:
             padding=10,
             style="Main.TLabel",
         ).grid(row=0, sticky="N")
-        ttk.Label(self.waitingFrame, text="Code", padding=10, style="Main.TLabel").grid(
+        ttk.Label(self.waitingFrame, text=GAME_CODE, padding=10, style="Main.TLabel").grid(
             row=1
         )
 
@@ -216,6 +217,11 @@ class FrontEnd:
         # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
         self.mainMenu = ttk.Frame(mainframe)
 
+        ttk.Entry(self.mainMenu, font=("Consolas", 30)).grid(
+            row=2, column=1, sticky="W, E"
+        )
+
+
         ttk.Label(
             self.mainMenu, text="Main Menu", padding=10, style="Main.TLabel"
         ).grid(row=0)
@@ -224,7 +230,7 @@ class FrontEnd:
             text="Create Game",
             padding=10,
             style="Main.TButton",
-            command=generateGameCode(),
+            command=generateGameCode,
         ).grid(row=1)
         ttk.Button(
             self.mainMenu,
@@ -233,7 +239,7 @@ class FrontEnd:
             style="Main.TButton",
             command=self.raiseFrame(self.writeAnswerFrame),
         ).grid(
-            row=2
+            row=3
         )  # TODO: add a function to validate join code with a generated game code on backend
 
         self.mainMenu.columnconfigure(0, weight=1)
