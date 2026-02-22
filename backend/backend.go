@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
-	"math/rand"
-	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
@@ -112,19 +112,35 @@ func gameReady(id string) bool {
 
 }
 
-//player's range is 1-2, questPos 1-3
-func questionGenerator(id string, player int, questPos int) {
+// player's range is 1-2, questPos 1-3
+func questionGenerator(id string, player int, questPos int, real bool) {
 	byteValue, err := os.ReadFile("questions.json")
-	if err!=nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	var questions Questions
 	json.Unmarshal([]byte(byteValue), &questions)
-	playerQuestionPair := `p`+string(player)+`_q`+string(questPos)
+	playerQuestionPair := "p" + strconv.Itoa(player) + "_q" + strconv.Itoa(questPos)
+	playerRealPair := "p" + strconv.Itoa(player) + "_real"
 	questStr := questions.QuestionList[rand.Intn(55)]
+	query := fmt.Sprintf("UPDATE sessions SET %s=$1 WHERE id=$2", playerQuestionPair)
+	queryReal := fmt.Sprintf("UPDATE sessions SET %s=%s,%s=$1 WHERE id=$2", playerRealPair, strconv.Itoa(questPos), playerQuestionPair)
 	_, err = db.Exec(
 		context.Background(),
-		`UPDATE sessions SET $1=$2 WHERE id=$3`, playerQuestionPair, questStr, id)
-	if err != nil {	log.Fatal(err) }
-	fetchAndInsertAnswers(id, player, questPos, questStr)
+		query, questStr, id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !real {
+		fetchAndInsertAnswers(id, player, questPos, questStr)
+	} else {
+		_, err := db.Exec(
+			context.Background(),
+			queryReal, questStr, id)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func player2Connect(c *gin.Context) {
@@ -156,16 +172,30 @@ func player2Connect(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"result": "Game joined"})
 
-	p1_rand1 := rand.Intn(2)+1
+	p1_rand1 := rand.Intn(3) + 1
 	p1_rand2 := p1_rand1
-	for (p1_rand1==p1_rand2) { p1_rand2=rand.Intn(2)+1 }
-	p2_rand1 := rand.Intn(2)+1
+	p1_real := p1_rand1
+	for p1_rand1 == p1_rand2 {
+		p1_rand2 = rand.Intn(3) + 1
+	}
+	for p1_real == p1_rand1 || p1_real == p1_rand2 {
+		p1_real = rand.Intn(3) + 1
+	}
+	p2_rand1 := rand.Intn(3) + 1
 	p2_rand2 := p2_rand1
-	for (p2_rand1==p2_rand2) { p2_rand2=rand.Intn(2)+1 }
-	go questionGenerator(id, 1, p1_rand1)
-	go questionGenerator(id, 1, p1_rand2)
-	go questionGenerator(id, 2, p2_rand1)
-	go questionGenerator(id, 2, p2_rand2)
+	p2_real := p2_rand1
+	for p2_rand1 == p2_rand2 {
+		p2_rand2 = rand.Intn(3) + 1
+	}
+	for p2_real == p2_rand1 || p2_real == p2_rand2 {
+		p2_real = rand.Intn(3) + 1
+	}
+	go questionGenerator(id, 1, p1_real, true)
+	go questionGenerator(id, 1, p1_rand1, false)
+	go questionGenerator(id, 1, p1_rand2, false)
+	go questionGenerator(id, 2, p2_real, true)
+	go questionGenerator(id, 2, p2_rand1, false)
+	go questionGenerator(id, 2, p2_rand2, false)
 }
 
 func create_room(c *gin.Context) {
