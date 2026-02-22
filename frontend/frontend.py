@@ -32,9 +32,6 @@ class Frontend:
         # write questions menu
         self.writeQuestionsFrame = ttk.Frame(mainframe)
 
-        # enter code menu
-        self.enterCodeFrame = ttk.Frame(mainframe)
-
         # game code menu
         self.waitingFrame = ttk.Frame(mainframe)
         
