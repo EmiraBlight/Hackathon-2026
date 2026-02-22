@@ -2,16 +2,14 @@ from random import randint
 from tkinter import *
 from tkinter import ttk
 
-from httpRequest import getGame
+from httpRequest import *
 
 GAME_CODE: str = ""
 PLAYER: str = ""
 
 
 class FrontEnd:
-    @staticmethod
-    def generateGameCode():
-        return str(randint(10000000, 99999999))
+
 
     @staticmethod
     def raiseFrame(frame: ttk.Frame):
@@ -22,6 +20,14 @@ class FrontEnd:
         event.widget.config(wraplength=event.widget.winfo_width())
 
     def __init__(self, root):
+
+        def generateGameCode():
+            self.raiseFrame(self.waitingFrame)
+            PLAYER = '1'
+            GAME_CODE = str(randint(10000000, 99999999))
+            createRoom(GAME_CODE)
+
+
         # establish root
         self.root = root
         root.title("Two AIs and a Human")
@@ -218,7 +224,7 @@ class FrontEnd:
             text="Create Game",
             padding=10,
             style="Main.TButton",
-            command=self.raiseFrame(self.waitingFrame),
+            command=generateGameCode(),
         ).grid(row=1)
         ttk.Button(
             self.mainMenu,
