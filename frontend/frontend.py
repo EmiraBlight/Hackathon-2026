@@ -254,7 +254,8 @@ class FrontEnd:
 
         # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
         self.mainMenu = ttk.Frame(mainframe)
-        global GAME_CODE_not = StringVar()
+        global GAME_CODE_not
+        GAME_CODE_not = StringVar()
         ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE_not).grid(
             row=2, column=1, sticky="W, E"
         )
