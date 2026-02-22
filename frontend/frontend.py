@@ -108,10 +108,10 @@ class FrontEnd:
 
         self.submitFrame.columnconfigure(0, weight=1)
 
-        def drawWinCondition(bool):
+        def drawWinCondition(boolo):
             self.writeWinConditionFrame = ttk.Frame(mainframe)
             self.writeWinConditionFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
-            if bool:
+            if boolo:
                 ttk.Label(self.writeWinConditionFrame, text="You win!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
             else:
                 ttk.Label(self.writeWinConditionFrame, text="You lose!", padding=10, style="Main.TLabel", justify="center").grid(row=0, column=0, sticky=(N, S, E, W))
