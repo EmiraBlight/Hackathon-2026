@@ -316,6 +316,8 @@ func main() {
 		log.Fatalf("Failed to connect to db: %s", err)
 	}
 
+	defer db.Close()
+
 	router := gin.Default()
 
 	router.GET("/ping", ping)
