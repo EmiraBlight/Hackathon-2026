@@ -71,7 +71,7 @@ class FrontEnd:
         # guess answer menu
         def drawGuessAnswerFrame():
             self.guessAnswerFrame = ttk.Frame(mainframe)
-
+            self.guessAnswerFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
             ttk.Label(
                 self.guessAnswerFrame,
                 text="Guess Human Answer",
@@ -156,7 +156,7 @@ class FrontEnd:
         # write answer menu
         def drawWriteAnswerFrame():
             self.writeAnswerFrame = ttk.Frame(mainframe)
-            self.writeAnswerFrame.grid_configure(sticky=(S, E, W), row=0, column=0)
+            self.writeAnswerFrame.grid_configure(sticky=(N, S, E, W), row=0, column=0)
 
             ttk.Label(
                 self.writeAnswerFrame, text="Write Answer", padding=10, style="Main.TLabel"
