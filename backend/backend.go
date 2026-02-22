@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"math/rand"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
@@ -16,6 +18,10 @@ import (
 
 	"google.golang.org/genai"
 )
+
+type Questions struct {
+	QuestionList []string `json:"questions"`
+}
 
 var db *pgxpool.Pool
 
@@ -75,6 +81,21 @@ func gameReady(id string) bool {
 
 }
 
+//player's range is 1-2, questPos 1-3
+func questionGenerator(id string, player int, questPos int) {
+	byteValue, err := os.ReadFile("questions.json")
+	if err!=nil { log.Fatal(err) }
+	var questions Questions
+	json.Unmarshal([]byte(byteValue), &questions)
+	playerQuestionPair := `p`+string(player)+`_q`+string(questPos)
+	questStr := questions.QuestionList[rand.Intn(55)]
+	_, err = db.Exec(
+		context.Background(),
+		`UPDATE sessions SET $1=$2 WHERE id=$3`, playerQuestionPair, questStr, id)
+	if err != nil {	log.Fatal(err) }
+	fetchAndInsertAnswers(id, player, questPos, questStr)
+}
+
 func player2Connect(c *gin.Context) {
 	id := c.Query("id")
 	var count int
@@ -104,6 +125,16 @@ func player2Connect(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"result": "Game joined"})
 
+	p1_rand1 := rand.Intn(2)+1
+	p1_rand2 := p1_rand1
+	for (p1_rand1==p1_rand2) { p1_rand2=rand.Intn(2)+1 }
+	p2_rand1 := rand.Intn(2)+1
+	p2_rand2 := p2_rand1
+	for (p2_rand1==p2_rand2) { p2_rand2=rand.Intn(2)+1 }
+	go questionGenerator(id, 1, p1_rand1)
+	go questionGenerator(id, 1, p1_rand2)
+	go questionGenerator(id, 2, p2_rand1)
+	go questionGenerator(id, 2, p2_rand2)
 }
 
 func create_room(c *gin.Context) {
@@ -167,7 +198,7 @@ func fetchAndInsertAnswers(id string, player int, questPos int, questStr string)
 	aiResponse, err := client.Models.GenerateContent(
 		ctx,
 		"gemma-3-1b-it",
-		genai.Text(questStr),
+		genai.Text(questStr+" (keep the answer under 2 sentences)"),
 		nil,
 	)
 	if err != nil {
