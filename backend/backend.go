@@ -131,7 +131,7 @@ func questionGenerator(id string, player int, questPos int, real bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if real {
+	if !real {
 		fetchAndInsertAnswers(id, player, questPos, questStr)
 	} else {
 		_, err := db.Exec(
