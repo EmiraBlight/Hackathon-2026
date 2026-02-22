@@ -22,19 +22,19 @@ class FrontEnd:
     def __init__(self, root):
 
         def generateGameCode():
-            self.raiseFrame(self.writeAnswerFrame)
+
             PLAYER = '1'
             GAME_CODE = str(randint(10000000, 99999999))
             createRoom(GAME_CODE)
             drawWriteAnswerFrame()
+            self.raiseFrame(self.writeAnswerFrame)
 
         
         def joinGame():
-            self.raiseFrame(self.writeAnswerFrame)
-            join(GAME_CODE)
+            player2Connect(GAME_CODE)
             PLAYER = '2'
             drawWriteAnswerFrame()
-
+            self.raiseFrame(self.writeAnswerFrame)
 
 
         # establish root
