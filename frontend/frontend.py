@@ -18,7 +18,7 @@ class FrontEnd:
 
     @staticmethod
     def wrapUpdate(event):
-        ttk.Style().configure(event.widget.winfo_class(), wraplength=event.widget.winfo_width())
+        ttk.Style().configure(event.widget.winfo_class(), wraplength=(event.widget.winfo_width() - 25))
 
     def __init__(self, root):
 
@@ -65,9 +65,9 @@ class FrontEnd:
 
         ttk.Style().configure("Main.TButton", font=("Consolas", 50))
         ttk.Style().configure("Main.TLabel", font=("Consolas", 50))
-        ttk.Style().configure("Side.TLabel", font=("Consolas", 30))
-        ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 30))
-        ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 30))
+        ttk.Style().configure("Side.TLabel", font=("Consolas", 24))
+        ttk.Style().configure("SideEntry.TEntry", font=("Consolas", 24))
+        ttk.Style().configure("sideButton.TRadiobutton", font=("Consolas", 24))
 
 
 
@@ -181,9 +181,7 @@ class FrontEnd:
                 ttk.Label(
                     self.writeAnswerFrame, text=f"A{int((i + 1) / 2)}:", style="Side.TLabel"
                 ).grid(row=i + 1, column=0, sticky="W")
-            ttk.Entry(self.writeAnswerFrame, font=("Consolas", 30)).grid(
-                row=6, column=1, sticky="W, E"
-            )
+
             ttk.Button(
                 self.writeAnswerFrame,
                 text="Submit",
@@ -194,22 +192,26 @@ class FrontEnd:
                 row=7, column=1
             )  # TODO: Add a function to submit answer to backend and draw next frame
 
+            data = list(getGame(GAME_CODE, PLAYER))
 
-            ttk.Label(
-                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
-            ).grid(row=1, column=1, sticky="W, E")  # TODO: backend
-            ttk.Label(
-                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
-            ).grid(row=2, column=1, sticky="W, E")
-            ttk.Label(
-                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
-            ).grid(row=3, column=1, sticky="W, E")
-            ttk.Label(
-                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
-            ).grid(row=4, column=1, sticky="W, E")
-            ttk.Label(
-                self.writeAnswerFrame, text=next(getGame(GAME_CODE, PLAYER)), style="Side.TLabel"
-            ).grid(row=5, column=1, sticky="W, E")
+            ttk.Label(self.writeAnswerFrame, text=data[0], style="Side.TLabel").grid(row=1, column=1, sticky="W, E")  # TODO: backend
+            ttk.Label(self.writeAnswerFrame, text=data[2], style="Side.TLabel").grid(row=3, column=1, sticky="W, E")
+            ttk.Label(self.writeAnswerFrame, text=data[4], style="Side.TLabel").grid(row=5, column=1, sticky="W, E")
+            if data[1] == "":
+                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24)).grid(row=2, column=1, sticky="W, E")
+                ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
+                ttk.Label(self.writeAnswerFrame, text=data[5], style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
+            elif data[3] == "":
+                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24)).grid(row=4, column=1, sticky="W, E")
+                ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
+                ttk.Label(self.writeAnswerFrame, text=data[5], style="Side.TLabel").grid(row=6, column=1, sticky="W, E")
+            else:
+                ttk.Entry(self.writeAnswerFrame, font=("Consolas", 24)).grid(row=6, column=1, sticky="W, E")
+                ttk.Label(self.writeAnswerFrame, text=data[1], style="Side.TLabel").grid(row=2, column=1, sticky="W, E")
+                ttk.Label(self.writeAnswerFrame, text=data[3], style="Side.TLabel").grid(row=4, column=1, sticky="W, E")
+
+
+
 
             for widget in self.writeAnswerFrame.winfo_children():
                 if widget.grid_info()["row"] >= 1 and widget.grid_info()["column"] == 1:
