@@ -45,6 +45,21 @@ func player2Connect(c *gin.Context) {
 
 }
 
+func create_room(c *gin.Context) {
+	id := c.Query("id")
+	_, err := db.Exec(context.Background(),
+		`INSERT INTO sessions (id,p2_connect_status) VALUES  ($1,$2)`,
+		id,
+		false,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": "failed to create room"})
+	}
+	c.JSON(http.StatusOK, gin.H{"result": "Room created"})
+
+}
+
 func isp2(id string) bool {
 	var isConn bool
 
