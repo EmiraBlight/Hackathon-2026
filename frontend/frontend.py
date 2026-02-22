@@ -32,6 +32,7 @@ class FrontEnd:
                     return
                 time.sleep(3)
 
+
         def generateGameCode():
             global PLAYER, GAME_CODE
             PLAYER = '1'
@@ -45,10 +46,12 @@ class FrontEnd:
         
         def joinGame():
             global PLAYER, GAME_CODE
-            player2Connect(GAME_CODE)
+            join(GAME_CODE)
             PLAYER = '2'
-            drawWriteAnswerFrame()
-            self.raiseFrame(self.writeAnswerFrame)()
+            thread = threading.Thread(target=wait_for_player)
+            thread.start()
+
+
 
 
         # establish root
@@ -250,8 +253,8 @@ class FrontEnd:
 
         # mainmenu frame ### DO NOT MOVE THIS "DO NOT LEAVE YET"
         self.mainMenu = ttk.Frame(mainframe)
-
-        ttk.Entry(self.mainMenu, font=("Consolas", 30)).grid(
+        GAME_CODE = StringVar()
+        ttk.Entry(self.mainMenu, font=("Consolas", 30), textvariable=GAME_CODE).grid(
             row=2, column=1, sticky="W, E"
         )
 
