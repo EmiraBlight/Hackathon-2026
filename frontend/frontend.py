@@ -39,7 +39,7 @@ class FrontEnd:
                 giveEntry = ent2.get()
             else:
                 giveEntry = ent3.get()
-            join(giveEntry)
+            submitAnswer(GAME_CODE, PLAYER, giveEntry)
 
         def generateGameCode():
             global PLAYER, GAME_CODE
