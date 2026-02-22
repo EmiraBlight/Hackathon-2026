@@ -17,7 +17,7 @@ class FrontEnd:
 
     @staticmethod
     def wrapUpdate(event):
-        event.widget.config(wraplength=event.widget.winfo_width())
+        ttk.Style().configure(event.widget.winfo_class(), wraplength=event.widget.winfo_width())
 
     def __init__(self, root):
 
